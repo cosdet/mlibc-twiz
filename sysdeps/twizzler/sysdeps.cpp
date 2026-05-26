@@ -1066,15 +1066,17 @@ int sys_isatty(int fd) {
 
 int sys_ioctl(int fd, unsigned long request, void *arg, int *result) {
     SYSTRACE("sys_ioctl(fd=%d, request=%lu, arg=%p, result=%p)", fd, request, arg, result);
+    
+    *result = 0
 
     switch(request) {
         case TIOCGWINSZ:
             return twz_error_errno(twz_rt_fd_get_config(fd, IO_REGISTER_WINSIZE, arg, sizeof(struct winsize)));
         case TIOCSWINSZ:
             return twz_error_errno(twz_rt_fd_set_config(fd, IO_REGISTER_WINSIZE, arg, sizeof(struct winsize)));
-        default: *result = 0;
+        default:
+            return 0; // Unimplemented ioctls will always succeed and return 0.
     }
-	return 0;
 }
 
 int sys_connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen) {
