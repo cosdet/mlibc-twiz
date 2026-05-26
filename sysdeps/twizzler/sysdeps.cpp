@@ -1070,6 +1070,8 @@ int sys_ioctl(int fd, unsigned long request, void *arg, int *result) {
     switch(request) {
         case TIOCGWINSZ:
             return twz_error_errno(twz_rt_fd_get_config(fd, IO_REGISTER_WINSIZE, arg, sizeof(struct winsize)));
+        case TIOCSWINSZ:
+            return twz_error_errno(twz_rt_fd_set_config(fd, IO_REGISTER_WINSIZE, arg, sizeof(struct winsize)));
         default: *result = 0;
     }
 	return 0;
